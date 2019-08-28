@@ -113,8 +113,9 @@ class MostUsedPlayer(Player):
 
     def next_action(self):
         a = list(Action.__members__.values())
-        action = reduce(lambda acc, n: n if self._history[n.value] > self._history[acc.value] else acc,
-                        a[1:], a[0])
+        action = reduce(
+            lambda acc, n: n if self._history[n.value] > self._history[acc.value] else acc,
+            a[1:], a[0])
         if self._history[action.value] == 0:
             return rand_action()
         return action
@@ -133,17 +134,16 @@ class HistoricPlayer(Player):
         self.n = n
 
     def next_action(self):
-        a = list(Action.__members__.values())
         recent = self._history[len(self._history)-self.n:]
 
         def inc_(d, k):
             d[k] += 1
             return d
 
-        s = list(subsequences(recent, self._history))
         move_history = reduce(lambda acc, x: inc_(acc, x),
                               map(lambda x: self._history[x[1]+1],
-                                  subsequences(recent, self._history[:-self.n])), defaultdict(int))
+                                  subsequences(recent, self._history[:-self.n])),
+                              defaultdict(int))
         if move_history:
             return Action.from_ord(max_val(move_history))
         return rand_action()
@@ -191,7 +191,8 @@ class MultiplePlays:
         action, points, total_points = self.simple_game.play()
         results = [self.players[0], 'nobody', self.players[1]]
         result = results[int(points[0]*0.5 + points[1]*2)]
-        return result, action, points, total_points, f'{self.players[0]}: {action[0]}. {self.players[1]}: {action[1]} -> {result.__str__()} wins'
+        return result, action, points, total_points,  \
+            f'{self.players[0]}: {action[0]}. {self.players[1]}: {action[1]} -> {result.__str__()} wins'
 
     def play_tournament(self, fig, ax):
         # Total score
@@ -200,11 +201,9 @@ class MultiplePlays:
                               range(0, self.n)), [[], []])
 
         # Total average points per round
-        # ah1, ah2 = reduce(lambda acc, x: (acc[0] + [avg(acc[0] + [x[0]])], acc[1] + [avg(acc[1] + [x[1]])]),
-        #                  map(lambda x: self.play_simplegame()[2], range(0, self.n)),
-        #                  [[], []])
         ah1, ah2 = reduce(
-            lambda acc, x: [[acc[0][0] + [avg(acc[1][0] + [x[0]])], acc[0][1] + [avg(acc[1][1] + [x[1]])]],
+            lambda acc, x: [[acc[0][0] + [avg(acc[1][0] + [x[0]])],
+                             acc[0][1] + [avg(acc[1][1] + [x[1]])]],
                             [acc[1][0] + [x[0]], acc[1][1] + [x[1]]]],
             map(lambda x: self.play_simplegame()[2], range(0, self.n)),
             [[[], []], [[], []]])[0]
