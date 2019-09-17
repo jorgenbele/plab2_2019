@@ -172,5 +172,17 @@ class TestHacker(unittest.TestCase):
         h.set_wordlist(self.wordlist)
         self.assertEqual(h.operate_cipher(e), key)
 
+    def test_unbreakable(self):
+        c = Unbreakable()
+        inp, key = 'retarded', 'debug'
+        e = c.encode(inp, key)
+        print('UNBREAKABLE', inp, key, e)
+        h = Hacker(c)
+        h.set_wordlist(self.wordlist)
+        found_key = h.operate_cipher(e)
+        print('FOUND KEY', found_key)
+        self.assertEqual(found_key, key)
+
+
 if __name__ == '__main__':
     unittest.main()
