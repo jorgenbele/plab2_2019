@@ -30,8 +30,8 @@ def words(str_: str):
         yield s
 
 
-def upper(lst):
-    return map(lambda x: x.upper(), lst)
+def lower(lst):
+    return map(lambda x: x.lower(), lst)
 
 
 class Container:
@@ -203,12 +203,13 @@ class Calculator:
         s = str_.replace('(', ' ( ')
         s = s.replace(')', ' ) ')
 
-        for w in upper(words(s)):
+        for w in lower(words(s)):
             if is_float(w):
                 yield float(w)
             elif w in self.operators.keys():
                 yield self.operators[w]
             elif w in self.functions.keys():
+                print('FUNCTION', w)
                 yield self.functions[w]
             else:
                 yield w

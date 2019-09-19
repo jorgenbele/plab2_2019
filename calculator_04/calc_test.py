@@ -66,36 +66,36 @@ class TestCalculator(unittest.TestCase):
     def test_exp_mult_add(self):
         import numpy as np
         c = Calculator()
-        exp, add, mult = (c.functions['EXP'], c.operators['+'], c.operators['*'])
+        exp, add, mult = (c.functions['exp'], c.operators['+'], c.operators['*'])
         self.assertEqual(exp(add(1, mult(2, 3))), 1096.6331584284585)
 
     def test_eval_rpn_exp_mult_add(self):
         import numpy as np
         c = Calculator()
-        exp, add, mult = (c.functions['EXP'], c.operators['+'], c.operators['*'])
+        exp, add, mult = (c.functions['exp'], c.operators['+'], c.operators['*'])
         inp = [3, 2, mult, 1, add, exp]
         self.assertEqual(exp(add(1, mult(2, 3))), c.eval_rpn(inp))
 
     def test_shunting_yard(self):
         import numpy as np
         c = Calculator()
-        exp, add, mult = (c.functions['EXP'], c.operators['+'], c.operators['*'])
+        exp, add, mult = (c.functions['exp'], c.operators['+'], c.operators['*'])
         inp = [exp, '(', 1, add, 2, mult, 3, ')']
         self.assertEqual(c.shunting_yard(inp), [1, 2, 3, mult, add, exp])
 
     def test_eval_shunting_yard(self):
         import numpy as np
         c = Calculator()
-        exp, add, mult = (c.functions['EXP'], c.operators['+'], c.operators['*'])
+        exp, add, mult = (c.functions['exp'], c.operators['+'], c.operators['*'])
         inp = [exp, '(', 1, add, 2, mult, 3, ')']
         self.assertEqual(np.exp(1+2*3), c.eval(inp))
 
     def test_parse(self):
-        c = Calculator()
-        exp, add, mult = (c.functions['EXP'], c.operators['+'], c.operators['*'])
-        tokens = list(c.tokens('exp(1 + 2 * 3)'))
-        self.assertEqual(tokens, [exp, '(', 1, add, 2, mult, 3, ')'])
-        self.assertEqual(np.exp(1+2*3), c.eval(tokens))
+       c = Calculator()
+       exp, add, mult = (c.functions['exp'], c.operators['+'], c.operators['*'])
+       tokens = list(c.tokens('exp(1 + 2 * 3)'))
+       self.assertEqual(tokens, [exp, '(', 1, add, 2, mult, 3, ')'])
+       self.assertEqual(np.exp(1+2*3), c.eval(tokens)) #.shunting_yard(tokens))
 
 if __name__ == '__main__':
     unittest.main()
